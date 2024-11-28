@@ -43,6 +43,7 @@
 #include <moveit/move_group/move_group_capability.h>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <moveit_msgs/action/execute_trajectory.hpp>
+#include <moveit/moveit_cpp/moveit_cpp.h>
 
 #include <memory>
 
@@ -59,11 +60,11 @@ public:
   void initialize() override;
 
 private:
-  void executePathCallback(const std::shared_ptr<ExecTrajectoryGoal>& goal);
-  void executePath(const std::shared_ptr<ExecTrajectoryGoal>& goal, std::shared_ptr<ExecTrajectory::Result>& action_res);
+  void executePathCallback(std::shared_ptr<ExecTrajectoryGoal> goal);
 
   void preemptExecuteTrajectoryCallback();
   void setExecuteTrajectoryState(MoveGroupState state, const std::shared_ptr<ExecTrajectoryGoal>& goal);
+  void completedTrajectoryCallback(const moveit_controller_manager::ExecutionStatus& status,std::shared_ptr<ExecTrajectoryGoal> goal);
 
   std::shared_ptr<rclcpp_action::Server<ExecTrajectory>> execute_action_server_;
 };

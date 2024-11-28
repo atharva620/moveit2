@@ -42,13 +42,13 @@
 #include <moveit_msgs/msg/robot_state.hpp>
 #include <deque>
 #include <memory>
-#include <optional>
 
-#include <rcl/error_handling.h>
-#include <rcl/time.h>
-#include <rclcpp/rclcpp.hpp>
-#include <rclcpp/time.hpp>
-#include <rclcpp/utilities.hpp>
+#include "rcl/error_handling.h"
+#include "rcl/time.h"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/time.hpp"
+#include "rclcpp/utilities.hpp"
 
 namespace robot_trajectory
 {
@@ -149,22 +149,25 @@ public:
     return duration_from_previous_;
   }
 
+  const rclcpp::Time& getStartTime() const
+  {
+    return start_time_;
+  }
+
   /** @brief  Returns the duration after start that a waypoint will be reached.
    *  @param  The waypoint index.
    *  @return The duration from start; returns overall duration if index is out of range.
    */
   double getWayPointDurationFromStart(std::size_t index) const;
 
+  [[deprecated]] double getWaypointDurationFromStart(std::size_t index) const;
+
   double getWayPointDurationFromPrevious(std::size_t index) const
   {
     if (duration_from_previous_.size() > index)
-    {
       return duration_from_previous_[index];
-    }
     else
-    {
       return 0.0;
-    }
   }
 
   RobotTrajectory& setWayPointDurationFromPrevious(std::size_t index, double value)
@@ -242,18 +245,7 @@ public:
   RobotTrajectory& append(const RobotTrajectory& source, double dt, size_t start_index = 0,
                           size_t end_index = std::numeric_limits<std::size_t>::max());
 
-  void swap(robot_trajectory::RobotTrajectory& other) noexcept;
-
-  /**
-   * \brief Remove a point from the trajectory
-   * \param index - the index to remove
-   */
-  RobotTrajectory& removeWayPoint(std::size_t index)
-  {
-    waypoints_.erase(waypoints_.begin() + index);
-    duration_from_previous_.erase(duration_from_previous_.begin() + index);
-    return *this;
-  }
+  void swap(robot_trajectory::RobotTrajectory& other);
 
   RobotTrajectory& clear()
   {
@@ -301,8 +293,6 @@ public:
   RobotTrajectory& reverse();
 
   RobotTrajectory& unwind();
-
-  /** @brief Unwind, starting from an initial state **/
   RobotTrajectory& unwind(const moveit::core::RobotState& state);
 
   /** @brief Finds the waypoint indices before and after a duration from start.
@@ -311,7 +301,7 @@ public:
    *  @param The waypoint index after (or equal to) the supplied duration.
    *  @param The progress (0 to 1) between the two waypoints, based on time (not based on joint distances).
    */
-  void findWayPointIndicesForDurationAfterStart(double duration, int& before, int& after, double& blend) const;
+  void findWayPointIndicesForDurationAfterStart(const double& duration, int& before, int& after, double& blend) const;
 
   // TODO support visitor function for interpolation, or at least different types.
   /** @brief Gets a robot state corresponding to a supplied duration from start for the trajectory, using linear time
@@ -324,19 +314,19 @@ public:
 
   class Iterator
   {
-    std::deque<moveit::core::RobotStatePtr>::iterator waypoint_iterator_;
-    std::deque<double>::iterator duration_iterator_;
+    std::deque<moveit::core::RobotStatePtr>::iterator waypoint_iterator;
+    std::deque<double>::iterator duration_iterator;
 
   public:
-    explicit Iterator(const std::deque<moveit::core::RobotStatePtr>::iterator& waypoint_iterator,
-                      const std::deque<double>::iterator& duration_iterator)
-      : waypoint_iterator_(waypoint_iterator), duration_iterator_(duration_iterator)
+    explicit Iterator(std::deque<moveit::core::RobotStatePtr>::iterator _waypoint_iterator,
+                      std::deque<double>::iterator _duration_iterator)
+      : waypoint_iterator(_waypoint_iterator), duration_iterator(_duration_iterator)
     {
     }
     Iterator& operator++()
     {
-      waypoint_iterator_++;
-      duration_iterator_++;
+      waypoint_iterator++;
+      duration_iterator++;
       return *this;
     }
     Iterator operator++(int)
@@ -345,17 +335,17 @@ public:
       ++(*this);
       return retval;
     }
-    bool operator==(const Iterator& other) const
+    bool operator==(Iterator other) const
     {
-      return ((waypoint_iterator_ == other.waypoint_iterator_) && (duration_iterator_ == other.duration_iterator_));
+      return ((waypoint_iterator == other.waypoint_iterator) && (duration_iterator == other.duration_iterator));
     }
-    bool operator!=(const Iterator& other) const
+    bool operator!=(Iterator other) const
     {
       return !(*this == other);
     }
     std::pair<moveit::core::RobotStatePtr, double> operator*() const
     {
-      return std::pair{ *waypoint_iterator_, *duration_iterator_ };
+      return std::pair{ *waypoint_iterator, *duration_iterator };
     }
 
     // iterator traits
@@ -396,7 +386,12 @@ private:
   const moveit::core::JointModelGroup* group_;
   std::deque<moveit::core::RobotStatePtr> waypoints_;
   std::deque<double> duration_from_previous_;
+  rclcpp::Clock clock_ros_;
+  rclcpp::Time start_time_;
 };
+
+/** @brief Operator overload for printing trajectory to a stream */
+std::ostream& operator<<(std::ostream& out, const RobotTrajectory& trajectory);
 
 /** @brief Operator overload for printing trajectory to a stream */
 std::ostream& operator<<(std::ostream& out, const RobotTrajectory& trajectory);
@@ -430,4 +425,5 @@ std::ostream& operator<<(std::ostream& out, const RobotTrajectory& trajectory);
 [[nodiscard]] std::optional<trajectory_msgs::msg::JointTrajectory>
 toJointTrajectory(const RobotTrajectory& trajectory, bool include_mdof_joints = false,
                   const std::vector<std::string>& joint_filter = {});
+
 }  // namespace robot_trajectory

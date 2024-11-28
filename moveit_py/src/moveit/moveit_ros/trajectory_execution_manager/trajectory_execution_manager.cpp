@@ -105,7 +105,7 @@ void initTrajectoryExecutionManager(py::module& m)
       .def("push",
            (bool(trajectory_execution_manager::TrajectoryExecutionManager::*)(const moveit_msgs::msg::RobotTrajectory&,
                                                                               const std::string&)) &
-               trajectory_execution_manager::TrajectoryExecutionManager::push,
+               trajectory_execution_manager::TrajectoryExecutionManager::pushToBlockingQueue,
            py::arg("trajectory"), py::arg("controller") = "",
            R"(
            Add a trajectory for future execution. Optionally specify a controller to use for the trajectory.
@@ -116,7 +116,7 @@ void initTrajectoryExecutionManager(py::module& m)
       .def("push",
            (bool(trajectory_execution_manager::TrajectoryExecutionManager::*)(
                const trajectory_msgs::msg::JointTrajectory&, const std::string&)) &
-               trajectory_execution_manager::TrajectoryExecutionManager::push,
+               trajectory_execution_manager::TrajectoryExecutionManager::pushToBlockingQueue,
            py::arg("trajectory"), py::arg("controller") = "",
            R"(
            Add a trajectory for future execution. Optionally specify a controller to use for the trajectory.
@@ -127,7 +127,7 @@ void initTrajectoryExecutionManager(py::module& m)
       .def("push",
            (bool(trajectory_execution_manager::TrajectoryExecutionManager::*)(const moveit_msgs::msg::RobotTrajectory&,
                                                                               const std::vector<std::string>&)) &
-               trajectory_execution_manager::TrajectoryExecutionManager::push,
+               trajectory_execution_manager::TrajectoryExecutionManager::pushToBlockingQueue,
            py::arg("trajectory"), py::arg("controllers"),
            R"(
            Add a trajectory for future execution.
@@ -141,7 +141,7 @@ void initTrajectoryExecutionManager(py::module& m)
       .def("push",
            (bool(trajectory_execution_manager::TrajectoryExecutionManager::*)(
                const trajectory_msgs::msg::JointTrajectory&, const std::vector<std::string>&)) &
-               trajectory_execution_manager::TrajectoryExecutionManager::push,
+               trajectory_execution_manager::TrajectoryExecutionManager::pushToBlockingQueue,
            py::arg("trajectory"), py::arg("controllers"),
            R"(
            Add a trajectory for future execution.
@@ -181,7 +181,7 @@ void initTrajectoryExecutionManager(py::module& m)
            R"(
            Execute a trajectory and wait for it to finish.
            )")
-      .def("wait_for_execution", &trajectory_execution_manager::TrajectoryExecutionManager::waitForExecution,
+      .def("wait_for_execution", &trajectory_execution_manager::TrajectoryExecutionManager::waitForBlockingExecution,
            py::call_guard<py::gil_scoped_release>(),
            R"(
            Wait for the current trajectory to finish execution.
@@ -190,11 +190,11 @@ void initTrajectoryExecutionManager(py::module& m)
       // See https://github.com/moveit/moveit2/issues/2442
       // get_current_expected_trajectory_index
       .def("get_last_execution_status",
-           &trajectory_execution_manager::TrajectoryExecutionManager::getLastExecutionStatus,
+           &trajectory_execution_manager::TrajectoryExecutionManager::getLastExecutionStatusBlocking,
            R"(
            Get the status of the last execution.
            )")
-      .def("stop_execution", &trajectory_execution_manager::TrajectoryExecutionManager::stopExecution,
+      .def("stop_execution", &trajectory_execution_manager::TrajectoryExecutionManager::stopBlockingExecution,
            py::arg("auto_clear") = true, py::call_guard<py::gil_scoped_release>(),
            R"(
            Stop whatever executions are active, if any.

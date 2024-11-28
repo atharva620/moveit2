@@ -88,7 +88,7 @@ plan_execution::PlanExecution::PlanExecution(
   if (!trajectory_execution_manager_)
   {
     trajectory_execution_manager_ = std::make_shared<trajectory_execution_manager::TrajectoryExecutionManager>(
-        node_, planning_scene_monitor_->getRobotModel(), planning_scene_monitor_->getStateMonitor());
+        node_, planning_scene_monitor_->getRobotModel(), planning_scene_monitor_);
   }
 
   default_max_replan_attempts_ = 5;
@@ -400,7 +400,7 @@ moveit_msgs::msg::MoveItErrorCodes plan_execution::PlanExecution::executeAndMoni
     // convert to message, pass along
     moveit_msgs::msg::RobotTrajectory msg;
     plan.plan_components[component_idx].trajectory->getRobotTrajectoryMsg(msg);
-    if (!trajectory_execution_manager_->push(msg, plan.plan_components[component_idx].controller_name))
+    if (!trajectory_execution_manager_->pushToBlockingQueue(msg, plan.plan_components[component_idx].controller_name))
     {
       trajectory_execution_manager_->clear();
       RCLCPP_ERROR(logger_, "Apparently trajectory initialization failed");
@@ -458,19 +458,19 @@ moveit_msgs::msg::MoveItErrorCodes plan_execution::PlanExecution::executeAndMoni
   if (preempt_requested)
   {
     RCLCPP_INFO(logger_, "Stopping execution due to preempt request");
-    trajectory_execution_manager_->stopExecution();
+    trajectory_execution_manager_->stopBlockingExecution();
   }
   else if (path_became_invalid_)
   {
     RCLCPP_INFO(logger_, "Stopping execution because the path to execute became invalid"
                          "(probably the environment changed)");
-    trajectory_execution_manager_->stopExecution();
+    trajectory_execution_manager_->stopBlockingExecution();
   }
   else if (!execution_complete_)
   {
     RCLCPP_WARN(logger_, "Stopping execution due to unknown reason."
                          "Possibly the node is about to shut down.");
-    trajectory_execution_manager_->stopExecution();
+    trajectory_execution_manager_->stopBlockingExecution();
   }
 
   // stop recording trajectory states
@@ -495,12 +495,12 @@ moveit_msgs::msg::MoveItErrorCodes plan_execution::PlanExecution::executeAndMoni
     }
     else
     {
-      if (trajectory_execution_manager_->getLastExecutionStatus() ==
+      if (trajectory_execution_manager_->getLastExecutionStatusBlocking() ==
           moveit_controller_manager::ExecutionStatus::SUCCEEDED)
       {
         result.val = moveit_msgs::msg::MoveItErrorCodes::SUCCESS;
       }
-      else if (trajectory_execution_manager_->getLastExecutionStatus() ==
+      else if (trajectory_execution_manager_->getLastExecutionStatusBlocking() ==
                moveit_controller_manager::ExecutionStatus::TIMED_OUT)
       {
         result.val = moveit_msgs::msg::MoveItErrorCodes::TIMED_OUT;

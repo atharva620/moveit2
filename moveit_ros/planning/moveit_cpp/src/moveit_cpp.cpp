@@ -77,7 +77,7 @@ MoveItCpp::MoveItCpp(const rclcpp::Node::SharedPtr& node, const Options& options
   }
 
   trajectory_execution_manager_ = std::make_shared<trajectory_execution_manager::TrajectoryExecutionManager>(
-      node_, getRobotModel(), planning_scene_monitor_->getStateMonitor());
+      node_, getRobotModel(), planning_scene_monitor_);
 
   RCLCPP_DEBUG(logger_, "MoveItCpp running");
 }
@@ -194,13 +194,6 @@ trajectory_execution_manager::TrajectoryExecutionManagerPtr MoveItCpp::getTrajec
 }
 
 moveit_controller_manager::ExecutionStatus
-MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory, bool /* blocking */,
-                   const std::vector<std::string>& /* controllers */)
-{
-  return execute(robot_trajectory);
-}
-
-moveit_controller_manager::ExecutionStatus
 MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
                    const std::vector<std::string>& controllers)
 {
@@ -211,6 +204,7 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   }
 
   const std::string group_name = robot_trajectory->getGroupName();
+  bool blocking = true;
 
   // Check if there are controllers that can handle the execution
   if (!trajectory_execution_manager_->ensureActiveControllersForGroup(group_name))
@@ -222,9 +216,14 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   // Execute trajectory
   moveit_msgs::msg::RobotTrajectory robot_trajectory_msg;
   robot_trajectory->getRobotTrajectoryMsg(robot_trajectory_msg);
-  trajectory_execution_manager_->push(robot_trajectory_msg, controllers);
-  trajectory_execution_manager_->execute();
-  return trajectory_execution_manager_->waitForExecution();
+  if (blocking)
+  {
+    trajectory_execution_manager_->pushToBlockingQueue(robot_trajectory_msg);
+    trajectory_execution_manager_->execute();
+    return trajectory_execution_manager_->waitForBlockingExecution();
+  }
+  trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
+  return moveit_controller_manager::ExecutionStatus::RUNNING;
 }
 
 bool MoveItCpp::terminatePlanningPipeline(const std::string& pipeline_name)
