@@ -249,7 +249,7 @@ void initMultiPlanRequestParameters(py::module& m)
         moveit_cpp::PlanningComponent::MultiPipelinePlanRequestParameters params{ node, planning_pipeline_names };
         return params;
       }))
-      .def_readonly("multi_plan_request_parameters",
+      .def_readwrite("multi_plan_request_parameters",
                     &moveit_cpp::PlanningComponent::MultiPipelinePlanRequestParameters::plan_request_parameter_vector);
 }
 void initPlanningComponent(py::module& m)

@@ -255,10 +255,10 @@ PlanningContextManager::PlanningContextManager(moveit::core::RobotModelConstPtr 
                                                constraint_samplers::ConstraintSamplerManagerPtr csm)
   : robot_model_(std::move(robot_model))
   , constraint_sampler_manager_(std::move(csm))
-  , max_goal_samples_(10)
-  , max_state_sampling_attempts_(4)
+  , max_goal_samples_(400)
+  , max_state_sampling_attempts_(1)
   , max_goal_sampling_attempts_(1000)
-  , max_planning_threads_(4)
+  , max_planning_threads_(8)
   , max_solution_segment_length_(0.0)
   , minimum_waypoint_count_(2)
 {
