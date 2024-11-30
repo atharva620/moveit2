@@ -371,9 +371,9 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
                                                 const rclcpp::Duration& backlog_timeout)
 {
   if (controller.empty())
-    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback, backlog_timeout);
   else
-    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(1, controller), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(1, controller), callback, backlog_timeout);
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory,
@@ -381,18 +381,18 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msg
                                                 const rclcpp::Duration& backlog_timeout)
 {
   if (controller.empty())
-    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback, backlog_timeout);
   else
-    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(1, controller), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(1, controller), callback, backlog_timeout);
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::string& controller, const ExecutionCompleteCallback& callback,
                                                             const rclcpp::Duration& backlog_timeout)
 {
   if (controller.empty())
-    return pushAndExecuteSimultaneous(state, std::vector<std::string>(), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(state, std::vector<std::string>(), callback, backlog_timeout);
   else
-    return pushAndExecuteSimultaneous(state, std::vector<std::string>(1, controller), callback,backlog_timeout);
+    return pushAndExecuteSimultaneous(state, std::vector<std::string>(1, controller), callback, backlog_timeout);
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory,
@@ -401,7 +401,8 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msg
 {
   moveit_msgs::msg::RobotTrajectory traj;
   traj.joint_trajectory = trajectory;
-  return pushAndExecuteSimultaneous(traj, controllers, callback,backlog_timeout);
+  traj.joint_trajectory.backlog_timeout = backlog_timeout;
+  return pushAndExecuteSimultaneous(traj, controllers, callback, backlog_timeout);
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state,
@@ -416,7 +417,8 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const sensor_msgs::m
   traj.joint_trajectory.points[0].velocities = state.velocity;
   traj.joint_trajectory.points[0].effort = state.effort;
   traj.joint_trajectory.points[0].time_from_start = rclcpp::Duration(0, 0);
-  return pushAndExecuteSimultaneous(traj, controllers, callback,backlog_timeout);
+  traj.joint_trajectory.backlog_timeout = backlog_timeout;
+  return pushAndExecuteSimultaneous(traj, controllers, callback, backlog_timeout);
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::msg::RobotTrajectory& trajectory,
@@ -429,7 +431,7 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
     context->execution_complete_callback = callback;
     context->backlog_timeout = backlog_timeout;
     context->blocking = false;
-    RCLCPP_DEBUG(LOGGER, "Backlog_timeout: %f",backlog_timeout.seconds());
+    RCLCPP_INFO(LOGGER, "Backlog_timeout: %f",backlog_timeout.seconds());
     {
       std::scoped_lock slock(continuous_execution_thread_mutex_);
       RCLCPP_INFO(LOGGER,"Continuous execution thread locked");

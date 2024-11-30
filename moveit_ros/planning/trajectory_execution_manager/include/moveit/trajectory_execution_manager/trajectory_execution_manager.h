@@ -105,7 +105,7 @@ public:
     moveit_controller_manager::ExecutionStatus last_execution_status_;
 
     //Timeout for backlog
-    rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(0);
+    rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(60);
 
     // Callback to call when execution is finished
     ExecutionCompleteCallback execution_complete_callback;

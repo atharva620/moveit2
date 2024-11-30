@@ -222,7 +222,7 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
     trajectory_execution_manager_->execute();
     return trajectory_execution_manager_->waitForBlockingExecution();
   }
-  trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
+  trajectory_execution_manager_->pushAndExecuteSimultaneous(trajectory=robot_trajectory_msg, backlog_timeout=rclcpp::Duration::from_seconds(60));
   return moveit_controller_manager::ExecutionStatus::RUNNING;
 }
 
