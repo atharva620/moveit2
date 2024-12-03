@@ -841,9 +841,11 @@ public:
     goal.trajectory = trajectory;
     goal.controller_names = controllers;
     goal.backlog_timeout = backlog_timeout;
+    RCLCPP_INFO(logger_, "Executing trajectory with goal fields: trajectory, controller_names, backlog_timeout");
 
     auto goal_handle_future = execute_action_client_->async_send_goal(goal, send_goal_opts);
     if (!wait)
+      RCLCPP_INFO(logger_, "SUCCESS::execute() not waiting for result");
       return moveit::core::MoveItErrorCode::SUCCESS;
 
     // wait until send_goal_opts.result_callback is called
@@ -1421,23 +1423,27 @@ moveit::core::MoveItErrorCode MoveGroupInterface::move()
 moveit::core::MoveItErrorCode MoveGroupInterface::asyncExecute(const Plan& plan,
                                                                const std::vector<std::string>& controllers, rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(logger_, "Executing plan, asyncExecute called");
   return impl_->execute(plan.trajectory, false, controllers, backlog_timeout);
 }
 
 moveit::core::MoveItErrorCode MoveGroupInterface::asyncExecute(const moveit_msgs::msg::RobotTrajectory& trajectory,
                                                                const std::vector<std::string>& controllers, rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(logger_, "Executing plan, asyncExecute called");
   return impl_->execute(trajectory, false, controllers, backlog_timeout);
 }
 
 moveit::core::MoveItErrorCode MoveGroupInterface::execute(const Plan& plan, const std::vector<std::string>& controllers, rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(logger_, "Executing plan through MoveGroupInterface, Execute called");
   return impl_->execute(plan.trajectory, true, controllers, backlog_timeout);
 }
 
 moveit::core::MoveItErrorCode MoveGroupInterface::execute(const moveit_msgs::msg::RobotTrajectory& trajectory,
                                                           const std::vector<std::string>& controllers, rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(logger_, "Executing plan through MoveGroupInterface, Execute called");
   return impl_->execute(trajectory, true, controllers, backlog_timeout);
 }
 

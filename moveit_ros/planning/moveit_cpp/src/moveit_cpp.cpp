@@ -216,13 +216,13 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   // Execute trajectory
   moveit_msgs::msg::RobotTrajectory robot_trajectory_msg;
   robot_trajectory->getRobotTrajectoryMsg(robot_trajectory_msg);
-  if (blocking)
-  {
-    trajectory_execution_manager_->pushToBlockingQueue(robot_trajectory_msg);
-    trajectory_execution_manager_->execute();
-    return trajectory_execution_manager_->waitForBlockingExecution();
-  }
-  trajectory_execution_manager_->pushAndExecuteSimultaneous(trajectory=robot_trajectory_msg, backlog_timeout=rclcpp::Duration::from_seconds(60));
+  // if (blocking)
+  // {
+  //   trajectory_execution_manager_->pushToBlockingQueue(robot_trajectory_msg);
+  //   trajectory_execution_manager_->execute();
+  //   return trajectory_execution_manager_->waitForBlockingExecution();
+  // }
+  trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
   return moveit_controller_manager::ExecutionStatus::RUNNING;
 }
 

@@ -216,37 +216,37 @@ public:
 
   /// Add a trajectory for immediate execution. Optionally specify a controller to use for the trajectory. If no
   /// controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const moveit_msgs::msg::RobotTrajectory& trajectory, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& backlog_timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const moveit_msgs::msg::RobotTrajectory& trajectory, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(60));
 
   /// Add a trajectory for immediate execution. Optionally specify a controller to use for the trajectory. If no
   /// controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& backlog_timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(60));
 
   /// Add a trajectory that consists of a single state for immediate execution. Optionally specify a controller to use
   /// for the trajectory.
   /// If no controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& backlog_timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::string& controller = "", const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(60));
 
   /// Add a trajectory for immediate execution. Optionally specify a set of controllers to consider using for the
   /// trajectory. Multiple controllers can be used simultaneously
   /// to execute the different parts of the trajectory. If multiple controllers can be used, preference is given to the
   /// already loaded ones.
   /// If no controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& backlog_timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration backlog_timeout = rclcpp::Duration::from_seconds(60));
 
   /// Add a trajectory for immediate execution. Optionally specify a set of controllers to consider using for the
   /// trajectory. Multiple controllers can be used simultaneously
   /// to execute the different parts of the trajectory. If multiple controllers can be used, preference is given to the
   /// already loaded ones.
   /// If no controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const moveit_msgs::msg::RobotTrajectory& trajectory, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const moveit_msgs::msg::RobotTrajectory& trajectory, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration timeout = rclcpp::Duration::from_seconds(60));
 
   /// Add a trajectory that consists of a single state for immediate execution. Optionally specify a set of controllers
   /// to consider using for the trajectory.
   /// Multiple controllers can be used simultaneously to execute the different parts of the trajectory. If multiple
   /// controllers can be used, preference
   /// is given to the already loaded ones. If no controller is specified, a default is used. This call is non-blocking.
-  bool pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(),const rclcpp::Duration& timeout = rclcpp::Duration::from_seconds(60));
+  bool pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback = ExecutionCompleteCallback(), rclcpp::Duration timeout = rclcpp::Duration::from_seconds(60));
 
   /// Wait until the execution is complete
   moveit_controller_manager::ExecutionStatus waitForBlockingExecution();
