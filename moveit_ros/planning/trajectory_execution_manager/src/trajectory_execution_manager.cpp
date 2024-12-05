@@ -435,13 +435,41 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
     {
       std::scoped_lock slock(continuous_execution_thread_mutex_);
       RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread locked");
+
       continuous_execution_queue_.push_back(context);
-      if (!continuous_execution_thread_)
-        continuous_execution_thread_.reset(
-            new std::thread(std::bind(&TrajectoryExecutionManager::continuousExecutionThread, this)));
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+      RCLCPP_INFO(LOGGER,"Continuous execution thread: context pushed");
+
+      if (!continuous_execution_thread_) {
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        RCLCPP_INFO(LOGGER,"Continuous execution thread: not running");
+        continuous_execution_thread_.reset(new std::thread(std::bind(&TrajectoryExecutionManager::continuousExecutionThread, this)));
+      }
     }
     context->last_execution_status_ = moveit_controller_manager::ExecutionStatus::SUCCEEDED;
     continuous_execution_condition_.notify_all();
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+    RCLCPP_INFO(LOGGER,"Continuous execution thread successfully notified");
+
     return true;
   }
   else
@@ -473,12 +501,25 @@ void TrajectoryExecutionManager::continuousExecutionThread()
     else if(active_contexts_.empty() && backlog.empty() && continuous_execution_queue_.empty()){
         std::unique_lock<std::mutex> ulock(continuous_execution_thread_mutex_);
         continuous_execution_condition_.wait(ulock);
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
     }
 
     // If stop-flag is set, break out
     if (stop_continuous_execution_ || !run_continuous_execution_thread_)
     {
-      RCLCPP_ERROR_STREAM(LOGGER, "Stop!. stop_continuous_execution: " << stop_continuous_execution_ << " run_continuous_execution_thread_: " << run_continuous_execution_thread_);
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+      RCLCPP_INFO(LOGGER, "Stop!. stop_continuous_execution");
+
       // Cancel ongoing executions
       stopBlockingExecution(true);
       // Clear map and used handles set
@@ -501,6 +542,14 @@ void TrajectoryExecutionManager::continuousExecutionThread()
     {
       // Get next trajectory context from queue
       RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+      RCLCPP_INFO(LOGGER, "Queue Size: %li",continuous_execution_queue_.size());
+
       TrajectoryExecutionContext* context = nullptr;
       {
         std::scoped_lock slock(continuous_execution_thread_mutex_);
@@ -518,8 +567,18 @@ void TrajectoryExecutionManager::continuousExecutionThread()
       // First make sure desired controllers are active
       if (!areControllersActive(context->controllers_))
       {
-        RCLCPP_ERROR(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
                              "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+                             "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+                             "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+                             "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+                             "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");
+        RCLCPP_INFO(LOGGER, "Not all needed controllers are active. Cannot pushToBlockingQueue and execute. You can try "
+                             "calling ensureActiveControllers() before pushAndExecuteSimultaneous()");                                                                                                                    
         context->last_execution_status_ = moveit_controller_manager::ExecutionStatus::ABORTED;
         RCLCPP_INFO(LOGGER, "Calling completed callback");
         context->execution_complete_callback(moveit_controller_manager::ExecutionStatus::ABORTED);
@@ -534,6 +593,22 @@ void TrajectoryExecutionManager::continuousExecutionThread()
         {
           RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
           RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");
+          RCLCPP_INFO(LOGGER, "Request with duration %lf", context->trajectory_.getDuration());
+          RCLCPP_INFO(LOGGER, "has handles blocked by backlog items. push_back to backlog");                                                                                
           backlog.push_back(std::pair<TrajectoryExecutionContext*, rclcpp::Time> (context, node_->now()));
           controllers_not_used_in_backlog = false;
           break;
@@ -542,6 +617,16 @@ void TrajectoryExecutionManager::continuousExecutionThread()
       if(controllers_not_used_in_backlog && !validateAndExecuteContext(*context))
       {
         RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+        RCLCPP_INFO(LOGGER, "Request: %lf not executable, pushing it into backlog", context->trajectory_.getDuration());
+
         backlog.push_back(std::pair<TrajectoryExecutionContext*, rclcpp::Time> (context, node_->now()));
       }
     }
@@ -2045,6 +2130,19 @@ bool TrajectoryExecutionManager::hasCommonHandles(TrajectoryExecutionContext& co
   getContextHandles(context1, ctx1_handles);
   getContextHandles(context2, ctx2_handles);
   // Compare the two vectors to see if they have common objects
+  if (std::find_first_of(ctx1_handles.begin(), ctx1_handles.end(),ctx2_handles.begin(), ctx2_handles.end()) != ctx1_handles.end()){
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+    RCLCPP_INFO(LOGGER, "Common handles found, aborting");
+  }
   return std::find_first_of(ctx1_handles.begin(), ctx1_handles.end(),ctx2_handles.begin(), ctx2_handles.end()) != ctx1_handles.end();
 }
 
@@ -2120,6 +2218,17 @@ bool TrajectoryExecutionManager::isRemainingPathValid(TrajectoryExecutionContext
 bool TrajectoryExecutionManager::checkAllRemainingPaths()
 {
   // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+  // RCLCPP_INFO(LOGGER, "Start checking all trajectories");
+
   planning_scene_monitor::LockedPlanningSceneRO ps(planning_scene_monitor_);
   const collision_detection::AllowedCollisionMatrix acm = ps->getAllowedCollisionMatrix();
 
@@ -2203,6 +2312,34 @@ bool TrajectoryExecutionManager::checkAllRemainingPaths()
           if (res.collision)
           {          
             RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+            RCLCPP_INFO(LOGGER, "Remaining Path invalid, cancelling execution.");
+
             //Extract the contexts that are colliding
             std::vector<int> colliding_contexts_;
             for(std::size_t i = 0; i < active_contexts_.size(); i++)
@@ -2233,6 +2370,32 @@ bool TrajectoryExecutionManager::checkAllRemainingPaths()
     }while((timeStamp += rclcpp::Duration::from_seconds(nextDuration)) - node_->now() < maxDuration );
   }
   // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+  // RCLCPP_INFO(LOGGER, "Finished checking all Paths");
+
   return true;
 }
 
