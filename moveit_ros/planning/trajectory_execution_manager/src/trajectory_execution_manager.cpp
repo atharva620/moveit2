@@ -475,6 +475,15 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
   else
   {
     delete context;
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
+    RCLCPP_INFO(LOGGER,"Failed to configure trajectory execution context");
     return false;
   }
 }
@@ -501,13 +510,13 @@ void TrajectoryExecutionManager::continuousExecutionThread()
     else if(active_contexts_.empty() && backlog.empty() && continuous_execution_queue_.empty()){
         std::unique_lock<std::mutex> ulock(continuous_execution_thread_mutex_);
         continuous_execution_condition_.wait(ulock);
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
-        RCLCPP_INFO(LOGGER, "Continuous execution thread: contexts and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
+        RCLCPP_INFO(LOGGER, "Continuous execution thread: active contexts, continuous execution queue and backlog are empty");
     }
 
     // If stop-flag is set, break out
@@ -677,6 +686,14 @@ void TrajectoryExecutionManager::checkBacklog()
       RCLCPP_INFO(LOGGER, "Backlog item with duration %lf will be checked and pushed to controller.", current_context->trajectory_.getDuration());
       if(validateAndExecuteContext(*current_context))
       {
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
+        RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
         RCLCPP_INFO(LOGGER, "Backlog item with duration %lf has been executed correctly.", current_context->trajectory_.getDuration() );
         it = backlog.erase(it);
       }
@@ -2093,11 +2110,29 @@ bool TrajectoryExecutionManager::validateAndExecuteContext(TrajectoryExecutionCo
   if (!checkCollisionsWithCurrentState(trajectory))
   {
     RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with current state. Cannot execute yet.");
     return false;
   }
 
   // Skip trajectory if it collides with other active trajectories
   if (!checkContextForCollisions(context)){
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
+    RCLCPP_INFO(LOGGER, "Trajectory collides with active trajectories. Cannot execute yet.");
     return false;
   }
 
