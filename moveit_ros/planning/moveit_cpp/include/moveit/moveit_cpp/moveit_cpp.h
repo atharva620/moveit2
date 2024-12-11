@@ -167,6 +167,7 @@ public:
 
   /** \brief Utility to terminate the given planning pipeline */
   bool terminatePlanningPipeline(const std::string& pipeline_name);
+  int counter = 0;
 
 private:
   //  Core properties and instances

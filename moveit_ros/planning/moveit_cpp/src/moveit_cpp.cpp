@@ -222,6 +222,8 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   //   trajectory_execution_manager_->execute();
   //   return trajectory_execution_manager_->waitForBlockingExecution();
   // }
+  counter++;
+  RCLCPP_INFO(logger_, "Executing trajectory %d", counter);
   trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
   return moveit_controller_manager::ExecutionStatus::RUNNING;
 }

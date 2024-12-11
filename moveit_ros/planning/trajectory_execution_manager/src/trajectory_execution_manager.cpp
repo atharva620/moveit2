@@ -370,16 +370,36 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
                                                 const std::string& controller, const ExecutionCompleteCallback& callback,
                                                 rclcpp::Duration backlog_timeout)
 {
-  if (controller.empty())
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1");
+  if (controller.empty()) {
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is empty");
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is empty");
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is empty");
     return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback, backlog_timeout);
-  else
+  } else {
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is not empty");
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is not empty");
+    RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 1 - controller is not empty");
     return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(1, controller), callback, backlog_timeout);
+  }
 }
 
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msgs::msg::JointTrajectory& trajectory,
                                                 const std::string& controller, const ExecutionCompleteCallback& callback,
                                                 rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 2");
+
   if (controller.empty())
     return pushAndExecuteSimultaneous(trajectory, std::vector<std::string>(), callback, backlog_timeout);
   else
@@ -389,6 +409,13 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msg
 bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const sensor_msgs::msg::JointState& state, const std::string& controller, const ExecutionCompleteCallback& callback,
                                                             rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 3");
+
   if (controller.empty())
     return pushAndExecuteSimultaneous(state, std::vector<std::string>(), callback, backlog_timeout);
   else
@@ -399,6 +426,13 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const trajectory_msg
                                                 const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback,
                                                 rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 4");
+
   moveit_msgs::msg::RobotTrajectory traj;
   traj.joint_trajectory = trajectory;
   // traj.joint_trajectory.backlog_timeout = backlog_timeout;
@@ -409,6 +443,12 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const sensor_msgs::m
                                                 const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback,
                                                 rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 5");
   moveit_msgs::msg::RobotTrajectory traj;
   traj.joint_trajectory.header = state.header;
   traj.joint_trajectory.joint_names = state.name;
@@ -425,6 +465,12 @@ bool TrajectoryExecutionManager::pushAndExecuteSimultaneous(const moveit_msgs::m
                                                 const std::vector<std::string>& controllers, const ExecutionCompleteCallback& callback,
                                                 rclcpp::Duration backlog_timeout)
 {
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
+  RCLCPP_INFO(LOGGER, "Push and execute simultaneous - type 6");
   TrajectoryExecutionContext* context = nullptr;
   if (configure(&context,trajectory, controllers))
   {
