@@ -1475,8 +1475,16 @@ moveit_controller_manager::ExecutionStatus TrajectoryExecutionManager::waitForCo
 {
   {
     std::unique_lock<std::mutex> ulock(continuous_execution_thread_mutex_);
-    while (!continuous_execution_queue_.empty())
+    while (!continuous_execution_queue_.empty()) {
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
+      RCLCPP_INFO(LOGGER, "Waiting for continuous execution to finish");
       continuous_execution_condition_.wait(ulock);
+    }
   }
   // this will join the thread for executing sequences of trajectories
   stopContinuousExecution();
@@ -2107,15 +2115,35 @@ bool TrajectoryExecutionManager::validateAndExecuteContext(TrajectoryExecutionCo
   getContextHandles(context, handles);
   if (handles.empty())
   {
-    RCLCPP_ERROR_STREAM(LOGGER, "Trajectory context had no controller handles??");  
+    RCLCPP_INFO(LOGGER, "Trajectory context had no controller handles??");
+    RCLCPP_INFO(LOGGER, "Trajectory context had no controller handles??");
+    RCLCPP_INFO(LOGGER, "Trajectory context had no controller handles??");
+    RCLCPP_INFO(LOGGER, "Trajectory context had no controller handles??");
+    RCLCPP_INFO(LOGGER, "Trajectory context had no controller handles??");
     return false;
   }
 
   // Break out if flags set
-  if (stop_continuous_execution_ || !run_continuous_execution_thread_)
-  {
+  // if (stop_continuous_execution_ || !run_continuous_execution_thread_)
+  // {
+  if (!run_continuous_execution_thread_) {
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
+    RCLCPP_INFO(LOGGER, "Continuous execution thread not running");
     return false;
   }
+  if (stop_continuous_execution_) {
+    RCLCPP_INFO(LOGGER, "Stop continuous execution flag set");
+    RCLCPP_INFO(LOGGER, "Stop continuous execution flag set");
+    RCLCPP_INFO(LOGGER, "Stop continuous execution flag set");
+    RCLCPP_INFO(LOGGER, "Stop continuous execution flag set");
+    RCLCPP_INFO(LOGGER, "Stop continuous execution flag set");
+    return false;
+  } 
+  // }
 
 
   RCLCPP_INFO(LOGGER, "DEBUG: Printing necessary handles for new traj");
@@ -2128,7 +2156,12 @@ bool TrajectoryExecutionManager::validateAndExecuteContext(TrajectoryExecutionCo
     // Check whether this trajectory starts at current robot state
   if (!validate(context))
   {
-    RCLCPP_ERROR(LOGGER, "Trajectory not valid at this point");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
+    RCLCPP_INFO(LOGGER, "Trajectory not valid at this point because it does not start at current robot state");
     // return false in order to push it to the backlog, maybe the trajectory will start at the end of the current
     // otherwise it will expire
     //context.execution_complete_callback(moveit_controller_manager::ExecutionStatus::ABORTED);

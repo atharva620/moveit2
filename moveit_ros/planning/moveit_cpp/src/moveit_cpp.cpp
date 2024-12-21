@@ -204,7 +204,7 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   }
 
   const std::string group_name = robot_trajectory->getGroupName();
-  bool blocking = true;
+  bool blocking = false;
 
   // Check if there are controllers that can handle the execution
   if (!trajectory_execution_manager_->ensureActiveControllersForGroup(group_name))
@@ -216,16 +216,18 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   // Execute trajectory
   moveit_msgs::msg::RobotTrajectory robot_trajectory_msg;
   robot_trajectory->getRobotTrajectoryMsg(robot_trajectory_msg);
-  // if (blocking)
-  // {
-  //   trajectory_execution_manager_->pushToBlockingQueue(robot_trajectory_msg);
-  //   trajectory_execution_manager_->execute();
-  //   return trajectory_execution_manager_->waitForBlockingExecution();
-  // }
-  counter++;
-  RCLCPP_INFO(logger_, "Executing trajectory %d", counter);
-  trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
-  return moveit_controller_manager::ExecutionStatus::RUNNING;
+  if (blocking)
+  {
+    trajectory_execution_manager_->pushToBlockingQueue(robot_trajectory_msg);
+    trajectory_execution_manager_->execute();
+    return trajectory_execution_manager_->waitForBlockingExecution();
+  } else {
+    counter++;
+    RCLCPP_INFO(logger_, "Executing trajectory %d", counter);
+    trajectory_execution_manager_->pushAndExecuteSimultaneous(robot_trajectory_msg);
+    // return moveit_controller_manager::ExecutionStatus::RUNNING;
+    return trajectory_execution_manager_->waitForContinuousExecution();
+  }
 }
 
 bool MoveItCpp::terminatePlanningPipeline(const std::string& pipeline_name)
