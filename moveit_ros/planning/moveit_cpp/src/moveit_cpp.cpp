@@ -204,6 +204,8 @@ MoveItCpp::execute(const robot_trajectory::RobotTrajectoryPtr& robot_trajectory,
   }
 
   const std::string group_name = robot_trajectory->getGroupName();
+  // keep blcoking = true because asynchronous execution will anyway take 
+  // place through the ExecuteTrajectory action and not throught this function
   bool blocking = false;
 
   // Check if there are controllers that can handle the execution
